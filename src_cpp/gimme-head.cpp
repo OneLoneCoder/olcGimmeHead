@@ -189,34 +189,33 @@ int main(int argc, char* argv[])
 
 	// Argument 1 is the template file, so start there and discover
 	// source files via "GRAB" comments
-	auto tf = ImportFile(vecArgs[1]);
-	if (!tf)
+	auto f = ImportFile(vecArgs[1]);
+	if (!f)
 	{
 		std::cout << "Error: Could not open file - " << vecArgs[1] << "\n";
 		return -1;
 	}
 
-	// Template file is considered a code section by itself, called "#OG_TEMPLATE"
-	auto f = ImportFile(vecArgs[1]);
+	// Template file is considered a code section by itself, called "#OG_TEMPLATE"	
 	std::unordered_map<std::string, std::vector<std::string>> primary_section;
 	primary_section.insert({ "OG_TEMPLATE", *f });
 	mapCodeSections.insert({ vecArgs[1], primary_section });
 	
 	// As we scan through the source, we'll discover all files accessed by "GRAB"
-	// command. Use a set to ignore duplicates.
-	std::list<std::string> vecDiscoveredFiles;
+	// command. 
+	std::list<std::string> listDiscoveredFiles;
 
 	// Thanks slavka, pointing out std::unordered_set is no good for this
-	auto list_append_no_duplicates = [&vecDiscoveredFiles](const std::string& sFile)
+	auto list_append_no_duplicates = [&listDiscoveredFiles](const std::string& sFile)
 		{
-			if (std::find(vecDiscoveredFiles.begin(), vecDiscoveredFiles.end(), sFile) == vecDiscoveredFiles.end())
-				vecDiscoveredFiles.push_back(sFile);
+			if (std::find(listDiscoveredFiles.begin(), listDiscoveredFiles.end(), sFile) == listDiscoveredFiles.end())
+				listDiscoveredFiles.push_back(sFile);
 		};
 	
 
-	// Stage 1) Discovery phase, note vecDiscoveredFiles will be mutated during loop
+	// Stage 1) Discovery phase, note listDiscoveredFiles will be mutated during loop
 	list_append_no_duplicates(vecArgs[1]);
-	for (const auto& file : vecDiscoveredFiles)
+	for (const auto& file : listDiscoveredFiles)
 	{
 		auto f = ImportFile(file);
 		if (!f)
