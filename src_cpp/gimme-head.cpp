@@ -204,11 +204,18 @@ int main(int argc, char* argv[])
 	
 	// As we scan through the source, we'll discover all files accessed by "GRAB"
 	// command. Use a set to ignore duplicates.
-	std::unordered_set<std::string> vecDiscoveredFiles;
+	std::list<std::string> vecDiscoveredFiles;
+
+	// Thanks slavka, pointing out std::unordered_set is no good for this
+	auto list_append_no_duplicates = [&vecDiscoveredFiles](const std::string& sFile)
+		{
+			if (std::find(vecDiscoveredFiles.begin(), vecDiscoveredFiles.end(), sFile) == vecDiscoveredFiles.end())
+				vecDiscoveredFiles.push_back(sFile);
+		};
 	
 
 	// Stage 1) Discovery phase, note vecDiscoveredFiles will be mutated during loop
-	vecDiscoveredFiles.insert(vecArgs[1]);
+	list_append_no_duplicates(vecArgs[1]);
 	for (const auto& file : vecDiscoveredFiles)
 	{
 		auto f = ImportFile(file);
@@ -232,7 +239,7 @@ int main(int argc, char* argv[])
 				{
 					// If file is legit, add it to discovered files
 					if(std::filesystem::exists(tokens[1]))
-						vecDiscoveredFiles.insert(tokens[1]);
+						list_append_no_duplicates(tokens[1]);
 					// otherwise its a "virtual file"
 				}
 
