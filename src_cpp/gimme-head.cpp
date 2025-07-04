@@ -179,7 +179,7 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; i++)
 		vecArgs.push_back(argv[i]);
 
-	if (vecArgs.size() < 2)
+	if (vecArgs.size() < 3)
 	{
 		std::cout << "Error: Not enough arguments\n";
 		std::cout << "Usage: gimme-head template_filename output_filename\n";
