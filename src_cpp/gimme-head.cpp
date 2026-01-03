@@ -62,12 +62,13 @@
 #include <vector>
 #include <string>
 #include <fstream>
-#include <sstream>
 #include <optional>
 #include <unordered_map>
-#include <unordered_set>
 #include <array>
 #include <filesystem>
+#include <algorithm>
+#include <list>
+#include <format>
 
 // Database of all named code sections
 std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string>>> mapCodeSections;
@@ -179,12 +180,19 @@ int main(int argc, char* argv[])
 	for (int i = 0; i < argc; i++)
 		vecArgs.push_back(argv[i]);
 
-	if (vecArgs.size() < 2)
+	if (vecArgs.size() < 3)
 	{
 		std::cout << "Error: Not enough arguments\n";
-		std::cout << "Usage: gimme-head template_filename output_filename\n";
+		std::cout << "Usage: gimme-head [--line-num] template_filename output_filename\n";
 
 		return -1;
+	}
+
+	bool bLineNum = false;
+	if (vecArgs.size() == 4 && vecArgs[1] == "--line-num")
+	{
+		bLineNum = true;
+		vecArgs.erase(vecArgs.begin() + 1);
 	}
 
 	// Argument 1 is the template file, so start there and discover
@@ -226,9 +234,11 @@ int main(int argc, char* argv[])
 
 		std::string sCurrentSectionName = "";
 		std::string sTargetFile = file;
+		unsigned int uLineNum = 0;
 
 		for (const auto& line : *f)
 		{
+			uLineNum++;
 			const auto tokens = ParseLine(line);
 			
 
@@ -257,9 +267,11 @@ int main(int argc, char* argv[])
 					}
 
 					std::unordered_map<std::string, std::vector<std::string>> section;
-					section.insert({ sCurrentSectionName, {} });
+					std::vector<std::string> lines;
+					if (bLineNum)
+						lines.push_back(std::format("#line {} \"{}\"", uLineNum + 1, file));
+					section.insert({ sCurrentSectionName, lines });
 					mapCodeSections.insert({ sTargetFile, section });
-					
 				}
 
 				else if (tokens[0] == "END")
