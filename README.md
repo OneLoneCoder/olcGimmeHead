@@ -1,6 +1,15 @@
 # olcGimmeHead
 A simple guided text parser to combine multifile C++ projects into a single header include
 
+# Linux build
+
+```bash
+cmake -B build
+cmake --build build
+```
+
+Tool should now be located at `build/gimme-head`.
+
 # Example
 `example.h`
 ```cpp

@@ -33,3 +33,9 @@
 /.vs
 /msvc/.vs/olcGimmeHead
 /msvc/olcGimmeHead/x64/Debug
+
+# Local Cmake Definitions
+CMakePresets.json
+
+# build artifacts
+/build
