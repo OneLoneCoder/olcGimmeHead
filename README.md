@@ -42,10 +42,10 @@ MyClass::MyClass()
 ```cpp
 #pragma once
 
-//!GRAB example.h DECLARATION
+//! GRAB example.h DECLARATION
 
 #if defined(APP_IMPL)
-//!GRAB example.cpp IMPLEMENTATION
+//! GRAB example.cpp IMPLEMENTATION
 #undef APP_IMPL
 #endif
 ```
