@@ -61,16 +61,15 @@
 #include <algorithm>
 #include <array>
 #include <filesystem>
+#include <format>
 #include <fstream>
+#include <iostream>
+#include <list>
 #include <optional>
 #include <sstream>
 #include <string>
 #include <unordered_map>
-#include <array>
-#include <filesystem>
-#include <algorithm>
-#include <list>
-#include <format>
+#include <vector>
 
 // Database of all named code sections
 std::unordered_map<std::string, std::unordered_map<std::string, std::vector<std::string>>> mapCodeSections;
