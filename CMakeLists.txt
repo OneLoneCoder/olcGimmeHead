@@ -17,11 +17,13 @@ target_sources(gimme-head
 )
 
 # force Visual Studio to use the binary directory without creating Debug/Release directories
-set_target_properties(gimme-head PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY   "$<1:${CMAKE_BINARY_DIR}>"
-    LIBRARY_OUTPUT_DIRECTORY   "$<1:${CMAKE_BINARY_DIR}>"
-    ARCHIVE_OUTPUT_DIRECTORY   "$<1:${CMAKE_BINARY_DIR}>"
-)
+if(MSVC)
+    set_target_properties(gimme-head PROPERTIES
+        RUNTIME_OUTPUT_DIRECTORY   "$<1:${CMAKE_BINARY_DIR}>"
+        LIBRARY_OUTPUT_DIRECTORY   "$<1:${CMAKE_BINARY_DIR}>"
+        ARCHIVE_OUTPUT_DIRECTORY   "$<1:${CMAKE_BINARY_DIR}>"
+    )
+endif()
 
 # Allow emscripten access to the host filesystem
 if(EMSCRIPTEN)
