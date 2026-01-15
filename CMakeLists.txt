@@ -10,3 +10,11 @@ target_sources(gimme-head
     PRIVATE
     src_cpp/gimme-head.cpp
 )
+
+# Allow emscripten access to the host filesystem
+if(EMSCRIPTEN)
+    target_link_options(gimme-head
+        PRIVATE
+        -sNODERAWFS
+    )
+endif()
